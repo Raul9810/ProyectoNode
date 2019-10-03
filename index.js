@@ -1,6 +1,10 @@
 const express = require('express');
 const pokedex = require('./pokedex')
+const bodyParser = require('body-parser')
 var app = express();
+
+app.use(bodyParser.json()) //convierte al formato json
+app.use(bodyParser.urlencoded({ extended:true })) //body esta en la url de la peticion
 
 app.get("/", (req,res)=>{
     res.send();
@@ -27,6 +31,15 @@ app.get('/pokedex/:name', (req,res) =>{
 app.get('/pokedex/image/:id', (req,res) =>{
     const id = req.params.id
     res.send("<img src='"+pokedex.pokemon[id-1].img+"'>")
+})
+
+app.post('/pokedex', (req,res) => {
+    res.json(req.body)
+})
+
+app.use((req,res) => {
+    res.status(404)
+    res.json({404:"No existe la pagina, suerte loser (Fer)"})
 })
 
 app.listen(3000,() => {
