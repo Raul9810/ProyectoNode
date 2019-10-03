@@ -1,28 +1,27 @@
 const express = require('express');
 const pokedex = require('./pokedex')
 var app = express();
-var arreglo = [], a1 = [], a2 = [];
-var otro = {}
 
 app.get("/", (req,res)=>{
     res.send();
 })
 
-app.get('/pokedex/id/:id', (req,res) =>{
+app.get('/pokedex/\\brandom\\b', (req,res) =>{
+    const numR = Math.floor((Math.random() * 150) + 1);
+    res.json(pokedex.pokemon[numR])
+})
+
+app.get('/pokedex/:id', (req,res, next) =>{
     const id = req.params.id
+    if(isNaN(id)) next();
     res.json(pokedex.pokemon[id-1])
 })
 
-app.get('/pokedex/name/:name', (req,res) =>{
+app.get('/pokedex/:name', (req,res) =>{
     const name = req.params.name
     pokedex.pokemon.forEach( x => {
         if(x.name == name) res.send(pokedex.pokemon[x.id-1])
     });
-})
-
-app.get('/pokedex/random', (req,res) =>{
-    const numR = Math.floor((Math.random() * 150) + 1);
-    res.json(pokedex.pokemon[numR])
 })
 
 app.get('/pokedex/image/:id', (req,res) =>{
